@@ -1,0 +1,29 @@
+<div class="form-group">
+  <h1 class="display-4">Create a new note</h1>
+  <form [formGroup]="noteForm">
+    <div class="form-comtrol">
+      <app-text-input
+        [formControl]="noteForm.controls['title']"
+        [label]="'Title'"
+      ></app-text-input>
+    </div>
+    <div class="mb-3 mt-3">
+      <textarea
+        [class.is-invalid]="
+          noteForm.controls['content'].touched &&
+          noteForm.controls['content'].invalid
+        "
+        class="form-control"
+        formControlName="content"
+        rows="6"
+      ></textarea>
+    </div>
+    <div class="form-comtrol">
+      <app-text-input
+        [formControl]="noteForm.controls['tags']"
+        [label]="'Tags'"
+      ></app-text-input>
+    </div>
+    <button [disabled]="noteForm.invalid" class="btn btn-primary" (click)="createNote()">Create</button>
+  </form>
+</div>

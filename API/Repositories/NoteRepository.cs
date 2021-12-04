@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.DTO;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
@@ -12,9 +16,11 @@ namespace API.Repositories
 	public class NoteRepository : INoteRepository
 	{
 		private readonly DataContext _context;
+		private readonly IMapper _mapper;
 
-		public NoteRepository(DataContext context)
+		public NoteRepository(DataContext context, IMapper mapper)
 		{
+			this._mapper = mapper;
 			this._context = context;
 		}
 
@@ -25,12 +31,16 @@ namespace API.Repositories
 
 		public async Task<Note> GetNoteByIdAsync(int id)
 		{
+
 			return await _context.Notes.FirstOrDefaultAsync(note => note.Id == id);
 		}
 
-		public async Task<IEnumerable<Note>> GetNotesByUserAsync(int userId)
+		public async Task<PagedList<NoteDTO>> GetNotesByUserAsync(int userId, PaginationParams pageParams)
 		{
-			return await _context.Notes.Where(note => note.userId == userId).ToListAsync();
+			var query = _context.Notes.AsQueryable();
+			query = query.Where(note => note.userId == userId);
+
+			return await PagedList<NoteDTO>.CreateAsync(query.ProjectTo<NoteDTO>(_mapper.ConfigurationProvider).AsNoTracking(),pageParams.PageNumber, pageParams.PageSize);
 
 		}
 

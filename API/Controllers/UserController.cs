@@ -10,7 +10,7 @@ using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controller
+namespace API.Controllers
 {
 	public class UserController : BaseAPIController
 	{
@@ -52,9 +52,10 @@ namespace API.Controller
 
 		[Route("login")]
 		[HttpPost]
-		public async Task<ActionResult<UserDTO>> Login(AuthDTO dto)
+		public async Task<ActionResult<UserDTO>> Login([FromBody] AuthDTO dto)
 		{
 			var user = await _userRep.GetUserByUsernameAsync(dto.Username);
+			
 			if (user == null)
 			{
 				return Unauthorized("Account or password is incorrect!");

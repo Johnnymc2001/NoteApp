@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using API.DTO;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace API.Controller
+namespace API.Controllers
 {
 	[Authorize]
 	public class NoteController : BaseAPIController
@@ -26,30 +27,35 @@ namespace API.Controller
 			this._mapper = mapper;
 		}
 
+		[Route("")]
 		[HttpGet]
-		public async Task<ActionResult<NoteDTO>> GetNotes()
+		public async Task<ActionResult<NoteDTO>> GetNotes([FromQuery] PaginationParams pageParams)
 		{
 			var userId = User.GetId();
-			var notes = await _noteRepository.GetNotesByUserAsync(userId);
+			var notes = await _noteRepository.GetNotesByUserAsync(userId, pageParams);
 
-			return Ok(_mapper.Map<List<NoteDTO>>(notes));
+         Response.AddPaginationHeader(notes.CurrentPage, notes.PageSize,
+                notes.TotalCount, notes.TotalPages);
+
+			return Ok(notes);
 		}
 
 		[Route("{id}")]
 		[HttpGet]
 		public async Task<ActionResult<NoteDTO>> GetNote(int id)
 		{
-			var userId = User.GetId();
+			int? userId = User.GetId();
 			var note = await _noteRepository.GetNoteByIdAsync(id);
 
 			if (note == null) return NotFound();
-			if (note.userId != userId && note.PublicAccess == false) return BadRequest("This is not your note!");
+			if (note.userId != userId) return BadRequest("This is not your note!");
 
 			return Ok(_mapper.Map<NoteDTO>(note));
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> CreateNote([FromBody] NoteDTO dto) {
+		public async Task<ActionResult> CreateNote([FromBody] NoteDTO dto)
+		{
 			var userId = User.GetId();
 
 			var note = new Note();

@@ -12,8 +12,6 @@ namespace API.Entities
 		public string Content { get; set; }
 		public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 		public string Tags { get; set; }
-		public bool PublicAccess { get; set; } = false;
-
 		public User user { get; set; }
 		public int userId { get; set; }
 	}

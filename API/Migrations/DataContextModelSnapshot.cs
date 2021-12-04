@@ -37,9 +37,6 @@ namespace API.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("PublicAccess")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Tags")
                         .IsRequired()
                         .HasColumnType("text");

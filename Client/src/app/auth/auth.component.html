@@ -1,0 +1,67 @@
+<div class="container-fluid mt-3">
+  <div *ngIf="(accountService.currentUser$ | async) != null">
+    <div class="card bg-light mb-3" style="max-width: 18rem">
+      <div class="card-header">
+        {{ (accountService.currentUser$ | async).username }}
+      </div>
+      <div class="card-body">
+        <div class="card-title">Welcome back!</div>
+        <button class="btn btn-primary" routerLink="/create">Create Note</button>
+        <button class="btn btn-danger" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="(accountService.currentUser$ | async) == null">
+    <tabset>
+      <tab heading="Login" id="tab1"
+        ><div class="card bg-light mb-3" style="max-width: 18rem">
+          <div class="card-header">Login</div>
+          <div class="card-body">
+            <div class="card-title">Please Login</div>
+            <app-text-input
+              [formControl]="loginForm.controls['username']"
+              [label]="'Username'"
+            ></app-text-input>
+            <app-text-input
+              type="password"
+              [formControl]="loginForm.controls['password']"
+              [label]="'Password'"
+            ></app-text-input>
+            <button
+              [disabled]="loginForm.invalid"
+              (click)="login()"
+              class="btn btn-primary"
+            >
+              Login
+            </button>
+          </div>
+        </div></tab
+      >
+      <tab heading="Register">
+        <div class="card bg-light mb-3" style="max-width: 18rem">
+          <div class="card-header">Register</div>
+          <div class="card-body">
+            <div class="card-title">Please Register A New Account</div>
+            <app-text-input
+              [formControl]="registerForm.controls['username']"
+              [label]="'Username'"
+            ></app-text-input>
+            <app-text-input
+              type="password"
+              [formControl]="registerForm.controls['password']"
+              [label]="'Password'"
+            ></app-text-input>
+            <app-text-input
+              type="password"
+              [formControl]="registerForm.controls['confirmPassword']"
+              [label]="'Confirm Password'"
+            ></app-text-input>
+            <button [disabled]="registerForm.invalid" (click)="register()" class="btn btn-primary">
+              Register
+            </button>
+          </div>
+        </div></tab
+      >
+    </tabset>
+  </div>
+</div>
