@@ -1,6 +1,6 @@
 <div
   class="card bg-light"
-  style="max-width: 100%; overflow: scroll; overflow-y: auto"
+  style="max-width: 100%; overflow: scroll; overflow-y: auto; max-height: 500px"
 >
   <div *ngIf="(accountService.currentUser$ | async) == null">
     <h1 class="text-center display-4">Please sign in to see your notes!</h1>
@@ -10,7 +10,6 @@
 
     <div
       class="card-body"
-      style="max-height: 300px"
       *ngFor="let note of noteService.currentNotes$ | async"
     >
       <div class="card bg-light" style="max-width: 100%">
@@ -22,12 +21,17 @@
           >
             Delete
           </button>
-          <button class="btn btn-secondary float-right" routerLink="edit/{{note.id}}">Modify</button>
+          <button
+            class="btn btn-secondary float-right"
+            routerLink="edit/{{ note.id }}"
+          >
+            Modify
+          </button>
         </div>
 
         <div class="card-body">
           <p class="card-text">{{ note.content }}</p>
-          <p class="card-footer float-right">{{note.tags | tag}}</p>
+          <p class="card-footer float-right">{{ note.tags | tag }}</p>
         </div>
       </div>
     </div>
