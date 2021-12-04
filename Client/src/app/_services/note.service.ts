@@ -45,7 +45,7 @@ export class NoteService {
   createNote(note: Note) {
     return this.http.post(this.baseUrl + "note", note).pipe(
       map((resp) => {
-        this.currentNoteSource.next([...this.currentNoteSource.value, note]);
+        this.currentNoteSource.next([note, ...this.currentNoteSource.value]);
       })
     )
   }

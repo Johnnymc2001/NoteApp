@@ -38,7 +38,8 @@ namespace API.Repositories
 		public async Task<PagedList<NoteDTO>> GetNotesByUserAsync(int userId, PaginationParams pageParams)
 		{
 			var query = _context.Notes.AsQueryable();
-			query = query.Where(note => note.userId == userId);
+
+			query = query.Where(note => note.userId == userId).OrderByDescending(note => note.CreatedAt);
 
 			return await PagedList<NoteDTO>.CreateAsync(query.ProjectTo<NoteDTO>(_mapper.ConfigurationProvider).AsNoTracking(),pageParams.PageNumber, pageParams.PageSize);
 
