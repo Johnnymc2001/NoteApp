@@ -19,6 +19,15 @@ builder.Services.AddAuthenticationServices(builder.Configuration);
 
 var app = builder.Build();
 
+// Auto Migrations
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+try {
+	var context = services.GetRequiredService<DataContext>();
+	await context.Database.MigrateAsync();
+} catch {}
+
 app.UseRouting();
 app.UseHttpsRedirection();
 
