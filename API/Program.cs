@@ -33,4 +33,4 @@ app.UseStaticFiles();
 app.MapControllers();
 app.MapFallbackToController("Index", "Fallback");
 
-app.Run("https://localhost:5000");
+app.Run();
