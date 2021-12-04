@@ -32,7 +32,7 @@ namespace API.Repositories
 		public async Task<Note> GetNoteByIdAsync(int id)
 		{
 
-			return await _context.Notes.FirstOrDefaultAsync(note => note.Id == id);
+			return await _context.Notes.AsNoTracking().FirstOrDefaultAsync(note => note.Id == id);
 		}
 
 		public async Task<PagedList<NoteDTO>> GetNotesByUserAsync(int userId, PaginationParams pageParams)
@@ -41,11 +41,19 @@ namespace API.Repositories
 
 			query = query.Where(note => note.userId == userId).OrderByDescending(note => note.CreatedAt);
 
-			return await PagedList<NoteDTO>.CreateAsync(query.ProjectTo<NoteDTO>(_mapper.ConfigurationProvider).AsNoTracking(),pageParams.PageNumber, pageParams.PageSize);
+			return await PagedList<NoteDTO>.CreateAsync(query.ProjectTo<NoteDTO>(_mapper.ConfigurationProvider).AsNoTracking(), pageParams.PageNumber, pageParams.PageSize);
 
 		}
 
-		public async Task<bool> DeleteNote(int id) {
+		public async Task<bool> UpdateNote(Note note)
+		{
+			var noteDb = await GetNoteByIdAsync(note.Id);
+			if (noteDb == null) return false;
+			_context.Entry<Note>(note).State = EntityState.Modified;
+			return await SaveAllAsync();
+		}
+		public async Task<bool> DeleteNote(int id)
+		{
 			var note = await GetNoteByIdAsync(id);
 			if (note == null) return false;
 			_context.Entry<Note>(note).State = EntityState.Deleted;

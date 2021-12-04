@@ -28,7 +28,7 @@ export class NoteCreateComponent implements OnInit {
   }
 
   createNote() {
-    let note = {publicAccess: this.noteForm.value["visibility"] == "Public"} as Note;
+    let note = {} as Note;
     Object.assign(note, this.noteForm.value);
 
     this.noteService.createNote(note).subscribe(resp => {

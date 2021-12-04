@@ -68,17 +68,33 @@ namespace API.Controllers
 			if (!result) return UnprocessableEntity("Failed to add note!");
 			return NoContent();
 		}
-		
+
 		[HttpDelete]
 		public async Task<ActionResult> DeleteNote([FromQuery] int id)
 		{
-			int? userId = User.GetId();
+			int userId = User.GetId();
 			var note = await _noteRepository.GetNoteByIdAsync(id);
 
 			if (note == null) return NotFound();
 			if (note.userId != userId) return BadRequest("This is not your note!");
 
 			if (await _noteRepository.DeleteNote(id)) return Ok();
+			return BadRequest();
+		}
+
+		[HttpPatch]
+		public async Task<ActionResult> DeleteNote(NoteDTO dto)
+		{
+			int userId = User.GetId();
+			var noteDb = await _noteRepository.GetNoteByIdAsync(dto.Id);
+
+			if (noteDb == null) return NotFound();
+			if (noteDb.userId != userId) return BadRequest("This is not your note!");
+
+			noteDb = _mapper.Map<Note>(dto);
+			noteDb.userId = userId;
+
+			if (await _noteRepository.UpdateNote(noteDb)) return Ok();
 			return BadRequest();
 		}
 	}

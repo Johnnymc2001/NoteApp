@@ -16,6 +16,8 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { LoadingInterceptor } from './_interceptors/busy.interceptor';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { NoteEditComponent } from './notes/note-edit/note-edit.component';
+import { CustomPipe } from './_pipes/custom.pipe';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     AuthComponent,
     NoteListComponent,
     NoteCreateComponent,
+    NoteEditComponent,
+    CustomPipe,
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,7 @@ namespace API.Interfaces
         Task<bool> SaveAllAsync();
         Task<Note> GetNoteByIdAsync(int id);
         Task<PagedList<NoteDTO>> GetNotesByUserAsync(int userId, PaginationParams pageParams);
+		Task<bool> UpdateNote(Note note);
 		Task<bool> DeleteNote(int id);
     }
 }
