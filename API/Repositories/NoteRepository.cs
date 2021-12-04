@@ -45,6 +45,13 @@ namespace API.Repositories
 
 		}
 
+		public async Task<bool> DeleteNote(int id) {
+			var note = await GetNoteByIdAsync(id);
+			if (note == null) return false;
+			_context.Entry<Note>(note).State = EntityState.Deleted;
+			return await SaveAllAsync();
+		}
+
 		public async Task<bool> SaveAllAsync()
 		{
 			return await _context.SaveChangesAsync() > 0;

@@ -49,7 +49,13 @@ export class NoteService {
       })
     )
   }
-
+  deleteNote(noteId : number) {
+    return this.http.delete(this.baseUrl + "note?id=" + noteId).pipe(
+		map((resp) => {
+		  this.currentNoteSource.next(this.currentNoteSource.value.filter(note => note.id != noteId));
+		})
+	  )
+  }
   resetNote() {
     this.currentNoteSource.next([]);
   }

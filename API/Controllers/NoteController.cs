@@ -34,8 +34,8 @@ namespace API.Controllers
 			var userId = User.GetId();
 			var notes = await _noteRepository.GetNotesByUserAsync(userId, pageParams);
 
-         Response.AddPaginationHeader(notes.CurrentPage, notes.PageSize,
-                notes.TotalCount, notes.TotalPages);
+			Response.AddPaginationHeader(notes.CurrentPage, notes.PageSize,
+				   notes.TotalCount, notes.TotalPages);
 
 			return Ok(notes);
 		}
@@ -67,6 +67,19 @@ namespace API.Controllers
 
 			if (!result) return UnprocessableEntity("Failed to add note!");
 			return NoContent();
+		}
+		
+		[HttpDelete]
+		public async Task<ActionResult> DeleteNote([FromQuery] int id)
+		{
+			int? userId = User.GetId();
+			var note = await _noteRepository.GetNoteByIdAsync(id);
+
+			if (note == null) return NotFound();
+			if (note.userId != userId) return BadRequest("This is not your note!");
+
+			if (await _noteRepository.DeleteNote(id)) return Ok();
+			return BadRequest();
 		}
 	}
 }

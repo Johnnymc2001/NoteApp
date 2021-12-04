@@ -16,22 +16,29 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddAuthenticationServices(builder.Configuration);
 
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
 // Auto Migrations
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
-try {
+try
+{
 	var context = services.GetRequiredService<DataContext>();
 	await context.Database.MigrateAsync();
-} catch {}
+}
+catch { }
 
 app.UseRouting();
 app.UseHttpsRedirection();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://noteapp-testing.herokuapp.com"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "https://noteapp-testing.herokuapp.com"));
 
 app.UseAuthentication();
 app.UseAuthorization();

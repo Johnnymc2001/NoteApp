@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Note } from 'src/app/_models/note';
 import { Pagination } from 'src/app/_models/pagination';
 import { User } from 'src/app/_models/user';
@@ -15,18 +16,18 @@ export class NoteListComponent implements OnInit {
   notes: Note[];
   pagination: Pagination;
 
-  constructor(public noteService : NoteService, public accountService: AccountService) {
+  constructor(public noteService : NoteService, public accountService: AccountService, private toastr: ToastrService) {
     this.pagination = this.noteService.getParams();
   }
 
   ngOnInit(): void {
     this.accountService.currentUser$.subscribe(user => this.user = user);
     if (this.user != null) {
-      this.loadMembers();
+      this.loadNotes();
     }
   }
 
-  loadMembers() {
+  loadNotes() {
     this.noteService.setParams(this.pagination);
     this.noteService.getNotes(this.pagination).subscribe(response => {
       this.notes = response.result;
@@ -34,9 +35,16 @@ export class NoteListComponent implements OnInit {
     })
   }
 
+  deleteNote(id: number) {
+    this.noteService.deleteNote(id).subscribe((resp) => {
+      this.toastr.success('Note Deleted!');
+
+    });
+  }
+
   pageChanged(event: any) {
     this.pagination.currentPage = event.page;
     this.noteService.setParams(this.pagination);
-    this.loadMembers();
+    this.loadNotes();
   }
 }
