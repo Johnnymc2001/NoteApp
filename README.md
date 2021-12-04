@@ -10,4 +10,4 @@
 - Database :
 	- Data : Postgres
 
-![Image](https://i.imgur.com/QraqUk1.png)
+![Image](https://i.imgur.com/zB6RXJ5.png)
