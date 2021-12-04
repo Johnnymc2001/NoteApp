@@ -3,7 +3,8 @@
 
 # Demo
 - Heroku : https://noteapp-testing.herokuapp.com
- 
+# API
+[Postman](https://github.com/Johnnymc2001/NoteApp/blob/master/Note%20App.postman_collection.json)
 # Technology
 - Front-end : Angular
 - Back-end : ASP.NET
