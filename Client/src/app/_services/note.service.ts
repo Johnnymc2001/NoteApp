@@ -15,7 +15,6 @@ export class NoteService {
   private currentNoteSource = new BehaviorSubject<Note[]>([]);
   currentNotes$ = this.currentNoteSource.asObservable();
 
-  notes: Note[];
   pageParams: Pagination;
 
 
@@ -39,7 +38,6 @@ export class NoteService {
     return getPaginatedResult<Note[]>(this.baseUrl + 'note', params, this.http)
       .pipe(map(response => {
         this.currentNoteSource.next(response.result);
-        this.notes = response.result;
         return response;
       }))
   }
@@ -48,7 +46,6 @@ export class NoteService {
     return this.http.post(this.baseUrl + "note", note).pipe(
       map((resp) => {
         this.currentNoteSource.next([...this.currentNoteSource.value, note]);
-        this.notes = [...this.notes, note];
       })
     )
   }
