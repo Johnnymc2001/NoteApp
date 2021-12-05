@@ -36,9 +36,15 @@ try
 catch { }
 
 app.UseRouting();
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "https://noteapp-testing.herokuapp.com"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(
+"https://localhost:4200", 
+"http://localhost:4200", 
+"https://localhost:5000", 
+"http://localhost:5000", 
+"https://noteapp-testing.herokuapp.com"
+));
 
 app.UseAuthentication();
 app.UseAuthorization();
